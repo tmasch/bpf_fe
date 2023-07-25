@@ -5,8 +5,6 @@ Frontend for Berthold' s Picture Finder.
 Github Repositories extension.
 
 
-
-
 This template should help get you started developing with Vue 3 in Vite.
 
 ## Recommended IDE Setup
