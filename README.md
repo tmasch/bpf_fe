@@ -1,10 +1,8 @@
 # bpf_fe
 
-Frontend for Berthold's Picture Finder.
+Frontend for Berthold' s Picture Finder.
 
-
-
-
+Github Repositories extension.
 
 
 
