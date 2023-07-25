@@ -5,14 +5,9 @@ Frontend for Berthold' s Picture Finder.
 For working with VS Code, get the Github Repositories extension.
 
 To initialise a local repo, just use
-     git clone https://github.com/tmasch/bpf_fe
-
-
-To install run
-     npm install
-To run, run 
-     npm run dev
-
+```sh
+git clone https://github.com/tmasch/bpf_fe
+```
 
 This template should help get you started developing with Vue 3 in Vite.
 
