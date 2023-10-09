@@ -29,7 +29,12 @@
         <h1>Create new ressource</h1>
     </div>
     <div>
-        iiif manifest url <input v-model="iiifUrl" /><br>
+        iiif manifest url  <input v-model="iiifUrl" />   
+        <input type="radio" id="Book" value="b" v-model="material" />
+        <label for="Book">printed book</label>
+        <input type="radio" id="Manuscript" value="m" v-model="material" />
+        <label for="Manuscript">manuscript</label>
+        
         
 
         <button @click="getMetadata()">
@@ -46,22 +51,38 @@
     
     <h3>Metadata:</h3>
     <v-table v-if="metadata">
+        <tr v-if="metadata.material">
+            <td>Material:</td> 
+            <td>{{ metadata.material }}</td>   
+        </tr>
+        <tr v-if="metadata.bibliographic_information[0]">
+            <td>Bibliographic ID:</td>
+            <td>{{ metadata.bibliographic_information[0].bibliographic_id[0].name }} {{ metadata.bibliographic_information[0].bibliographic_id[0].id}}</td>
+        </tr>
         <tr v-if="metadata.bibliographic_information[0]">
             <td>Title:</td>
             <td>{{ metadata.bibliographic_information[0].title }}</td>
         </tr>
+    
+        <tr v-if="metadata.bibliographic_information[0]">
+            <td>Imprint:</td>
+            <td>{{ metadata.bibliographic_information[0].printing_information }}</td>
+        </tr>
         <tr v-if="metadata.bibliographic_information[0]" v-for="(person, index) in metadata.bibliographic_information[0].persons" :key="index">
-            <td>Person:</td>  
+            <td>Person ({{ person["role"] }}): </td>  
             <td :key="indexColumn">{{person["name"]}}</td>
-            <td :key="indexColumn">{{person["id"]}}</td>
-            <td :key="indexColumn">{{ person["role"] }}</td>
-        </tr>      
+            <td :key="indexColumn">{{person["id_name"]}} {{person["id"]}}</td>
+        </tr>
+             
         <tr v-if="metadata.bibliographic_information[0]" v-for="(place, index) in metadata.bibliographic_information[0].places" :key="index">
-            <td>Place:</td>  
+            <td>Place ({{place["role"] }}): </td>  
             <td :key="indexColumn">{{place["name"]}}</td>
-            <td :key="indexColumn">{{place["id"]}}</td>
-            <td :key="indexColumn">{{place["role"] }}</td>
-        </tr>      
+            <td :key="indexColumn">{{place["id_name"]}} {{place["id"]}}</td>
+        </tr>
+        <tr v-if="metadata.bibliographic_information[0]">
+            <td>Date:</td>
+            <td>{{ metadata.bibliographic_information[0].printing_date }}</td>
+        </tr>
         <tr>
             <td>Repository:</td>
             <td>{{ metadata.repository }}</td>
@@ -75,14 +96,26 @@
             <td>{{ metadata.numberOfImages }}</td>
         </tr>
         <tr>
-            <td>MARCXML:</td>
-            <td><a :href="metadata.markxml" target="_blank">{{ metadata.markxml }}</a></td>
-        </tr>
-        <tr>
             <td>IIIF URL</td>
             <td><a :href="metadata.iiifUrl" target="_blank">{{ metadata.iiifUrl }}</a></td>
         </tr>
     </v-table>
+    <br>
+   
+    <span v-if="Bibliographic_information_missing">
+
+        Simsalabim
+        </span>
+        <span v-else>
+            <p>bambasaladusaladim</p>
+        </span>
+        
+    additional bibliographical information  <input v-model="additional_bid" />  
+    
+    <button @click="$event => callAdditionalBibliographicInformation(additional_bid)">
+        Import missing information
+    </button>
+
     <button @click="$event => createNewRessource(metadata)">
         Create new ressource
     </button>
@@ -111,7 +144,10 @@ export default {
             vd16: '',
             vd17: '',
             message: '',
-            metadata: ''
+            metadata: '',
+            material: '',
+            additional_bid: '',
+            additional_bi: ''
         };
     },
     methods: {
@@ -122,7 +158,8 @@ export default {
             return axios.get(url,
                 {
                     params: {
-                        iiifUrl: this.iiifUrl
+                        iiifUrl: this.iiifUrl,
+                        material: this.material
                     }
                 }).then((response) => {
                     console.log(response.data)
@@ -140,9 +177,29 @@ export default {
                     console.log(response.data)
                     this.message = response.data || ''
                 })
+        },
+        callAdditionalBibliographicInformation(additional_bid) {
+            const url = `${API_URL}/callAdditionalBibliographicInformation`
+            console.log(url)
+            console.log(additional_bid)
+
+            return axios.get(url,
+                {
+                    params: {
+                        additional_bid: this.additional_bid
+                    }
+                }).then((response) =>  {
+                    console.log(response.data)
+                    this.additional_bi = response.data || ''                    
+                    this.metadata.bibliographic_information.push(this.additional_bi)
+                })
+            
         }
     }
 }
 
+//if(metadata) {
+//    Bibliographic_information_missing = true 
+//}
 
 </script>
