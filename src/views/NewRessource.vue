@@ -101,20 +101,15 @@
         </tr>
     </v-table>
     <br>
-   
-    <span v-if="Bibliographic_information_missing">
-
-        Simsalabim
-        </span>
-        <span v-else>
-            <p>bambasaladusaladim</p>
+    <span v-if="metadata && metadata.bibliographic_information[0] == undefined && material == 'b'">
+        additional bibliographical information  <input v-model="additional_bid" />  
+    
+        <button @click="$event => callAdditionalBibliographicInformation(additional_bid)">
+        Import missing information
+        </button>      
         </span>
         
-    additional bibliographical information  <input v-model="additional_bid" />  
-    
-    <button @click="$event => callAdditionalBibliographicInformation(additional_bid)">
-        Import missing information
-    </button>
+
 
     <button @click="$event => createNewRessource(metadata)">
         Create new ressource
@@ -164,7 +159,8 @@ export default {
                 }).then((response) => {
                     console.log(response.data)
                     this.metadata = response.data || ''
-                })
+                    console.log(this.material)
+                })            
         },
         createNewRessource(metadata) {
             const url = `${API_URL}/createNewRessource`
@@ -198,8 +194,9 @@ export default {
     }
 }
 
-//if(metadata) {
-//    Bibliographic_information_missing = true 
+//if(this.material) {
+//    Bibliographic_information_missing = true
+//    console.log("Material is indicated") 
 //}
 
 </script>
