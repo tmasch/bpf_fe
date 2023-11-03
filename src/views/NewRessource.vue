@@ -1,5 +1,5 @@
 <template>
-   <!----
+   <!--
            <p>Step 2 (Books)</p>
         <p>Ingest ID: <samp>ingest_id</samp></p>
          <h1>Ingest Module</h1>
@@ -50,7 +50,13 @@
     -->     
     
     <h3>Metadata:</h3>
-    <v-table v-if="metadata">
+    <!----<v-table v-if="metadata">
+        <tr>
+            <td width = 150></td>
+            <td width = 450></td>
+            <td width = 200></td>
+            <td width = 400></td>
+        </tr>
         <tr v-if="metadata.material">
             <td>Material:</td> 
             <td>{{ metadata.material }}</td>   
@@ -72,6 +78,12 @@
             <td>Person ({{ person["role"] }}): </td>  
             <td :key="indexColumn">{{person["name"]}}</td>
             <td :key="indexColumn">{{person["id_name"]}} {{person["id"]}}</td>
+            <td :key="indexColumn" v-if="metadata.bibliographic_information[0].persons[index].internal_id"> {{person["internal_id_preview"]}}</td>
+            <td v-else v-for="(candidate, number) in metadata.bibliographic_information[0].persons[index].potential_candidates" :key="number"> 
+            <input type="radio" id="candidate" value="number" v-model="chosen_person" />
+            <label for="candidate">{{ candidate.preview }}<br></label>
+            
+            </td>
         </tr>
              
         <tr v-if="metadata.bibliographic_information[0]" v-for="(place, index) in metadata.bibliographic_information[0].places" :key="index">
@@ -92,7 +104,7 @@
             <td> {{ metadata.shelfmark }}</td>
         </tr>
         <tr>
-            <td>Number of Images:</td>
+            <td>Number of Pages:</td>
             <td>{{ metadata.numberOfImages }}</td>
         </tr>
         <tr>
@@ -101,6 +113,123 @@
         </tr>
     </v-table>
     <br>
+-->     
+
+
+    <v-table v-if="metadata">
+        <tr>
+            <td width = 220></td>
+            <td width = 450></td>
+            <td width = 450></td>
+        </tr>
+        <tr v-if="metadata.material">
+            <td>Material:</td> 
+            <td>{{ metadata.material }}</td>   
+        </tr>
+        <tr v-if="metadata.bibliographic_information[0]">
+            <td>Bibliographic ID:</td>
+            <td>{{ metadata.bibliographic_information[0].bibliographic_id[0].name }} {{ metadata.bibliographic_information[0].bibliographic_id[0].id}}</td>
+        </tr>
+        <tr v-if="metadata.bibliographic_information[0]">
+            <td>Title:</td>
+            <td>{{ metadata.bibliographic_information[0].title }}</td>
+        </tr>
+    
+        <tr v-if="metadata.bibliographic_information[0]">
+            <td>Imprint:</td>
+            <td>{{ metadata.bibliographic_information[0].printing_information }}</td>
+        </tr>
+        <tr v-if="metadata.bibliographic_information[0]" v-for="(person, index_persons) in metadata.bibliographic_information[0].persons" :key="index_persons">
+            <td v-if="person.role=='prt' || person.role== 'pbl'"> Person (
+                <input type="radio" id="publisher" value="pbl" v-model="metadata.bibliographic_information[0].persons[index_persons].role">
+                <label for="publisher"> Publisher</label>
+                <input type="radio" id="printer" value="prt" v-model="metadata.bibliographic_information[0].persons[index_persons].role">
+                <label for="printer"> Printer)</label>
+
+                </td>  
+                <td v-else> Person ({{ person["role"] }})</td>
+            <td>{{person["name"]}} <span v-if="metadata.bibliographic_information[0].persons[index_persons].id">({{person["id_name"]}} {{person["id"]}}) </span></td>
+            <td> 
+                <table>
+                <tr> <td v-if="metadata.bibliographic_information[0].persons[index_persons].internal_id"> {{person["internal_id_preview"]}}</td></tr>
+                <tr v-if="!metadata.bibliographic_information[0].persons[index_persons].internal_id" v-for="(candidate, number) in metadata.bibliographic_information[0].persons[index_persons].potential_candidates" :key="number">
+                <td> <input type="radio" v-bind:id="candidate.preview" v-bind:value= "number" v-model="metadata.bibliographic_information[0].persons[index_persons].chosen_candidate">
+                <label for="candidate">{{ candidate.preview }} </label>
+                </td></tr>
+                <tr v-if="!metadata.bibliographic_information[0].persons[index_persons].internal_id"> 
+                    <td><!-- <input type="radio" id="new" vbind:value="len(metadata.bibliographic_information[0].persons[index_persons].potential_candidates)" v-model="metadata.bibliographic_information[0].persons[index_persons].chosen_candidate"> -->
+                        or enter other GND number: <input v-model="new_authority_id[index_persons]" /> 
+                        <div v-if="additional_person_authority"> 
+                            <label for="new">{{ additional_person_authority.preview }}</label></div>
+                        <button @click="loadNewAuthorityRecord(new_authority_id, index_persons)">load</button>
+
+                </td></tr>
+
+                <tr><td> 
+
+                </td></tr>
+            </table>
+            
+            
+            
+
+            
+            </td>
+        </tr>
+        
+        <tr v-if="metadata.bibliographic_information[0]" v-for="(place, index) in metadata.bibliographic_information[0].places" :key="index">
+            <td>Place ({{place["role"] }}): </td>  
+            <td>{{place["name"]}}</td>
+            <td>{{place["id_name"]}} {{place["id"]}}</td>
+        </tr>
+        <tr v-if="metadata.bibliographic_information[0]">
+            <td>Date:</td>
+            <td>{{ metadata.bibliographic_information[0].printing_date }}</td>
+        </tr>
+        <tr>
+            <td>Repository:</td>
+            <td>{{ metadata.repository }}</td>
+        </tr>
+        <tr>
+            <td> Shelfmark:</td>
+            <td> {{ metadata.shelfmark }}</td>
+        </tr>
+        <tr>
+            <td>Number of Pages:</td>
+            <td>{{ metadata.numberOfImages }}</td>
+        </tr>
+        <tr>
+            <td>IIIF URL</td>
+            <td><a :href="metadata.iiifUrl" target="_blank">{{ metadata.iiifUrl }}</a></td>
+        </tr>
+    </v-table>
+
+    <p v-if="metadata.bibliographic_information"> {{ metadata.bibliographic_information[0] }}             </p>
+
+
+<!--        
+    </v-table>
+    <span v-if="metadata.bibliographic_information">
+    <span v-for="(candidate, person_number) in metadata.bibliographic_information[0].persons[2].potential_candidates">
+        <input type= "radio" v-bind:id="candidate" v-bind:value="person_number" v-model="choice_experiment">
+        <label for="{{ candidate}}">{{ candidate.preview }}<br></label>
+    </span>
+    <p>Chosen Number: {{ choice_experiment }}</p>
+    </span>
+
+    <span v-if="metadata.bibliographic_information">
+        <input type="radio" id="candidate0" value="0" v-model="choice_experiment2" />
+        <label for="candidate0"> label candidate0</label>
+        <input type="radio" id="candidate1" value="1" v-model="choice_experiment2" />
+        <label for="candidate1">label candidate1</label>
+        <input type="radio" id="candidate2" value="2" v-model="choice_experiment2" />
+        <label for="candidate2">label candidate 2</label>
+        <p>Chosen Number: {{ choice_experiment2 }}</p>
+        
+    </span>
+
+-->
+
     <span v-if="metadata && metadata.bibliographic_information[0] == undefined && material == 'b'">
         additional bibliographical information  <input v-model="additional_bid" />  
     
@@ -109,6 +238,9 @@
         </button>      
         </span>
         
+    <button @click="$event => shownumber()">
+        Show number in console
+    </button>
 
 
     <button @click="$event => createNewRessource(metadata)">
@@ -121,6 +253,9 @@
 <script>
 import axios from 'axios'
 const API_URL = 'http://localhost:8000'
+let number = 0
+
+
 
 axios.interceptors.request.use(request => {
 //  console.log('Starting Request', JSON.stringify(request, null, 2))
@@ -142,7 +277,11 @@ export default {
             metadata: '',
             material: '',
             additional_bid: '',
-            additional_bi: ''
+            additional_bi: '',
+            choice_experiment: '',
+            choice_experiment2: '',
+            chosen_person1:'',
+            new_authority_id: []
         };
     },
     methods: {
@@ -190,7 +329,26 @@ export default {
                     this.metadata.bibliographic_information.push(this.additional_bi)
                 })
             
+        },
+        loadNewAuthorityRecord(new_authority_id, index_persons) {
+            console.log(this.new_authority_id)
+            const url = `${API_URL}/loadNewAuthorityRecord`
+            return axios.get(url,
+                {
+                    params: {
+                        new_authority_id: this.new_authority_id[index_persons]
+                    }
+                }).then((response) =>  {
+                    console.log(response.data)
+                    this.additional_person_authority = response.data || ''                    
+                    this.metadata.bibliographic_information[0].persons[index_persons].potential_candidates.push(this.additional_person_authority[0])
+                    let position = this.metadata.bibliographic_information[0].persons[index_persons].potential_candidates.length -1
+                    console.log(position)
+                    this.metadata.bibliographic_information[0].persons[index_persons].chosen_candidate = position
+                })
+
         }
+    
     }
 }
 

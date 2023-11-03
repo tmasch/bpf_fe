@@ -31,6 +31,11 @@ const router = createRouter({
       path: '/ressources',
       name: 'ressources',
       component: () => import('../views/Ressources.vue')  
+    },
+    {
+      path: '/Radiobutton - Experiment',
+      name: 'Radiobutton - Experiment',
+      component: () => import('../views/Radiobutton - Experiment.vue')
     }
 
   ]
