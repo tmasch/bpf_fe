@@ -43,77 +43,10 @@
 
     </div>
 
-   <!----
-        <button @click="getMetadata()">
-            Start Download and Analysis
-        </button>
-    -->     
+      
     
-    <h3>Metadata:</h3>
-    <!----<v-table v-if="metadata">
-        <tr>
-            <td width = 150></td>
-            <td width = 450></td>
-            <td width = 200></td>
-            <td width = 400></td>
-        </tr>
-        <tr v-if="metadata.material">
-            <td>Material:</td> 
-            <td>{{ metadata.material }}</td>   
-        </tr>
-        <tr v-if="metadata.bibliographic_information[0]">
-            <td>Bibliographic ID:</td>
-            <td>{{ metadata.bibliographic_information[0].bibliographic_id[0].name }} {{ metadata.bibliographic_information[0].bibliographic_id[0].id}}</td>
-        </tr>
-        <tr v-if="metadata.bibliographic_information[0]">
-            <td>Title:</td>
-            <td>{{ metadata.bibliographic_information[0].title }}</td>
-        </tr>
+    <h3 v-if="metadata">Metadata:</h3>
     
-        <tr v-if="metadata.bibliographic_information[0]">
-            <td>Imprint:</td>
-            <td>{{ metadata.bibliographic_information[0].printing_information }}</td>
-        </tr>
-        <tr v-if="metadata.bibliographic_information[0]" v-for="(person, index) in metadata.bibliographic_information[0].persons" :key="index">
-            <td>Person ({{ person["role"] }}): </td>  
-            <td :key="indexColumn">{{person["name"]}}</td>
-            <td :key="indexColumn">{{person["id_name"]}} {{person["id"]}}</td>
-            <td :key="indexColumn" v-if="metadata.bibliographic_information[0].persons[index].internal_id"> {{person["internal_id_preview"]}}</td>
-            <td v-else v-for="(candidate, number) in metadata.bibliographic_information[0].persons[index].potential_candidates" :key="number"> 
-            <input type="radio" id="candidate" value="number" v-model="chosen_person" />
-            <label for="candidate">{{ candidate.preview }}<br></label>
-            
-            </td>
-        </tr>
-             
-        <tr v-if="metadata.bibliographic_information[0]" v-for="(place, index) in metadata.bibliographic_information[0].places" :key="index">
-            <td>Place ({{place["role"] }}): </td>  
-            <td :key="indexColumn">{{place["name"]}}</td>
-            <td :key="indexColumn">{{place["id_name"]}} {{place["id"]}}</td>
-        </tr>
-        <tr v-if="metadata.bibliographic_information[0]">
-            <td>Date:</td>
-            <td>{{ metadata.bibliographic_information[0].printing_date }}</td>
-        </tr>
-        <tr>
-            <td>Repository:</td>
-            <td>{{ metadata.repository }}</td>
-        </tr>
-        <tr>
-            <td> Shelfmark:</td>
-            <td> {{ metadata.shelfmark }}</td>
-        </tr>
-        <tr>
-            <td>Number of Pages:</td>
-            <td>{{ metadata.numberOfImages }}</td>
-        </tr>
-        <tr>
-            <td>IIIF URL</td>
-            <td><a :href="metadata.iiifUrl" target="_blank">{{ metadata.iiifUrl }}</a></td>
-        </tr>
-    </v-table>
-    <br>
--->     
 
 
     <v-table v-if="metadata">
@@ -199,19 +132,36 @@
                 </td></tr>
 
 
-            </table>
-            
-
-            
-
-            
+            </table>       
+          
+           
             </td>
         </tr>
-            
-        <tr v-if="metadata.bibliographic_information[0]" v-for="(place, index) in metadata.bibliographic_information[0].places" :key="index">
+<!-- Section on places -->            
+        <tr v-if="metadata.bibliographic_information[0]" v-for="(place, index_places) in metadata.bibliographic_information[0].places" :key="index_places">
             <td>Place ({{place["role"] }}): </td>  
-            <td>{{place["name"]}}</td>
-            <td>{{place["id_name"]}} {{place["id"]}}</td>
+            <td>{{place["name"]}} <span v-if="metadata.bibliographic_information[0].places[index_places].id"> ({{place["id_name"]}} {{place["id"]}})</span></td>
+            <td> 
+                <table>
+                <tr> <td v-if="metadata.bibliographic_information[0].places[index_places].internal_id"> {{places["internal_id_preview"]}}</td></tr>
+                <tr v-if="!metadata.bibliographic_information[0].places[index_places].internal_id" v-for="(candidate_place, number) in metadata.bibliographic_information[0].places[index_places].potential_candidates" :key="number">
+                <td> <input type="radio" v-bind:id="candidate_places.preview" v-bind:value= "number" v-model="metadata.bibliographic_information[0].places[index_places].chosen_candidate">
+                <label for="candidate_place">{{ candidate_place.preview }} </label>
+                </td></tr>
+                <tr v-if="!metadata.bibliographic_information[0].places[index_places].internal_id"> 
+                    <td>
+                        or enter other GND number: <input v-model="new_authority_id_place[index_places]" /> 
+                        <div v-if="additional_place_authority"> 
+                            <label for="new">{{ additional_place_authority.preview }}</label></div>
+                        <button @click="loadNewPlaceAuthorityRecord(new_authority_id_place, index_places)">load</button>
+
+                </td></tr>
+
+
+            </table>       
+          
+           
+            </td>
         </tr>
         <tr v-if="metadata.bibliographic_information[0]">
             <td>Date:</td>
@@ -260,31 +210,8 @@
         </tr>
     </v-table>
 
-    <p v-if="metadata.bibliographic_information"> {{ metadata.bibliographic_information[0] }}             </p>
-    <p v-if="metadata.repository"> {{ metadata.repository[0] }}             </p>
 
-<!--        
-    </v-table>
-    <span v-if="metadata.bibliographic_information">
-    <span v-for="(candidate, person_number) in metadata.bibliographic_information[0].persons[2].potential_candidates">
-        <input type= "radio" v-bind:id="candidate" v-bind:value="person_number" v-model="choice_experiment">
-        <label for="{{ candidate}}">{{ candidate.preview }}<br></label>
-    </span>
-    <p>Chosen Number: {{ choice_experiment }}</p>
-    </span>
 
-    <span v-if="metadata.bibliographic_information">
-        <input type="radio" id="candidate0" value="0" v-model="choice_experiment2" />
-        <label for="candidate0"> label candidate0</label>
-        <input type="radio" id="candidate1" value="1" v-model="choice_experiment2" />
-        <label for="candidate1">label candidate1</label>
-        <input type="radio" id="candidate2" value="2" v-model="choice_experiment2" />
-        <label for="candidate2">label candidate 2</label>
-        <p>Chosen Number: {{ choice_experiment2 }}</p>
-        
-    </span>
-
--->
 
     <span v-if="metadata && metadata.bibliographic_information[0] == undefined && material == 'b'">
         additional bibliographical information  <input v-model="additional_bid" />  
@@ -339,8 +266,10 @@ export default {
             chosen_person1: '',
             new_authority_id: [],
             new_authority_id_org: [],
+            new_authority_id_place: [],
             candidate_person: '',
             candidate_organisation: "",
+            candidate_places: '',
             new_authority_id_rep: ""
         };
     },
@@ -424,6 +353,23 @@ export default {
                     let position = this.metadata.bibliographic_information[0].organisations[index_organisations].potential_candidates.length -1
                     console.log(position)
                     this.metadata.bibliographic_information[0].organisations[index_organisations].chosen_candidate = position
+                })
+            },
+        loadNewPlaceAuthorityRecord(new_authority_id, index_places) {
+            console.log(this.new_authority_id_place)
+            const url = `${API_URL}/loadNewPlaceAuthorityRecord`
+            return axios.get(url,
+                {
+                    params: {
+                        new_authority_id_place: this.new_authority_id_place[index_places]
+                    }
+                }).then((response) =>  {
+                    console.log(response.data)
+                    this.additional_organisation_authority = response.data || ''                    
+                    this.metadata.bibliographic_information[0].places[index_places].potential_candidates.push(this.additional_organisation_authority[0])
+                    let position = this.metadata.bibliographic_information[0].places[index_places].potential_candidates.length -1
+                    console.log(position)
+                    this.metadata.bibliographic_information[0].places[index_places].chosen_candidate = position
                 })
 
             },
