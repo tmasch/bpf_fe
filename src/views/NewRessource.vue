@@ -139,6 +139,8 @@
             <td>Imprint:</td>
             <td>{{ metadata.bibliographic_information[0].printing_information }}</td>
         </tr>
+
+<!-- Section on Persons-->
         <tr v-if="metadata.bibliographic_information[0]" v-for="(person, index_persons) in metadata.bibliographic_information[0].persons" :key="index_persons">
             <td v-if="person.role=='prt' || person.role== 'pbl'"> Person (
                 <input type="radio" id="publisher" value="pbl" v-model="metadata.bibliographic_information[0].persons[index_persons].role">
@@ -152,31 +154,60 @@
             <td> 
                 <table>
                 <tr> <td v-if="metadata.bibliographic_information[0].persons[index_persons].internal_id"> {{person["internal_id_preview"]}}</td></tr>
-                <tr v-if="!metadata.bibliographic_information[0].persons[index_persons].internal_id" v-for="(candidate, number) in metadata.bibliographic_information[0].persons[index_persons].potential_candidates" :key="number">
-                <td> <input type="radio" v-bind:id="candidate.preview" v-bind:value= "number" v-model="metadata.bibliographic_information[0].persons[index_persons].chosen_candidate">
-                <label for="candidate">{{ candidate.preview }} </label>
+                <tr v-if="!metadata.bibliographic_information[0].persons[index_persons].internal_id" v-for="(candidate_person, number) in metadata.bibliographic_information[0].persons[index_persons].potential_candidates" :key="number">
+                <td> <input type="radio" v-bind:id="candidate_person.preview" v-bind:value= "number" v-model="metadata.bibliographic_information[0].persons[index_persons].chosen_candidate">
+                <label for="candidate_person">{{ candidate_person.preview }} </label>
                 </td></tr>
                 <tr v-if="!metadata.bibliographic_information[0].persons[index_persons].internal_id"> 
                     <td><!-- <input type="radio" id="new" vbind:value="len(metadata.bibliographic_information[0].persons[index_persons].potential_candidates)" v-model="metadata.bibliographic_information[0].persons[index_persons].chosen_candidate"> -->
                         or enter other GND number: <input v-model="new_authority_id[index_persons]" /> 
                         <div v-if="additional_person_authority"> 
                             <label for="new">{{ additional_person_authority.preview }}</label></div>
-                        <button @click="loadNewAuthorityRecord(new_authority_id, index_persons)">load</button>
+                        <button @click="loadNewPersonAuthorityRecord(new_authority_id, index_persons)">load</button>
+
+                </td></tr>
+                </table>
+              
+                </td></tr>
+
+<!-- Section on Organisations -->
+
+            <tr v-if="metadata.bibliographic_information[0]" v-for="(organisation, index_organisations) in metadata.bibliographic_information[0].organisations" :key="index_organisations">
+            <td v-if="organisation.role=='prt' || organisation.role== 'pbl'"> Organisation (
+                <input type="radio" id="publisher" value="pbl" v-model="metadata.bibliographic_information[0].organisations[index_organisations].role">
+                <label for="publisher"> Publisher</label>
+                <input type="radio" id="printer" value="prt" v-model="metadata.bibliographic_information[0].organisations[index_organisations].role">
+                <label for="printer"> Printer)</label>
+
+                </td>  
+                <td v-else> Organisations ({{ organisation["role"] }})</td>
+            <td>{{organisation["name"]}} <span v-if="metadata.bibliographic_information[0].organisations[index_organisations].id">({{organisation["id_name"]}} {{organisation["id"]}}) </span></td>
+            <td> 
+                <table>
+                <tr> <td v-if="metadata.bibliographic_information[0].organisations[index_organisations].internal_id"> {{organisations["internal_id_preview"]}}</td></tr>
+                <tr v-if="!metadata.bibliographic_information[0].organisations[index_organisations].internal_id" v-for="(candidate_organisation, number) in metadata.bibliographic_information[0].organisations[index_organisations].potential_candidates" :key="number">
+                <td> <input type="radio" v-bind:id="candidate_organisation.preview" v-bind:value= "number" v-model="metadata.bibliographic_information[0].organisations[index_organisations].chosen_candidate">
+                <label for="candidate_organisation">{{ candidate_organisation.preview }} </label>
+                </td></tr>
+                <tr v-if="!metadata.bibliographic_information[0].organisations[index_organisations].internal_id"> 
+                    <td>
+                        or enter other GND number: <input v-model="new_authority_id_org[index_organisations]" /> 
+                        <div v-if="additional_organisation_authority"> 
+                            <label for="new">{{ additional_organisation_authority.preview }}</label></div>
+                        <button @click="loadNewOrganisationAuthorityRecord(new_authority_id_org, index_organisations)">load</button>
 
                 </td></tr>
 
-                <tr><td> 
 
-                </td></tr>
             </table>
             
-            
+
             
 
             
             </td>
         </tr>
-        
+            
         <tr v-if="metadata.bibliographic_information[0]" v-for="(place, index) in metadata.bibliographic_information[0].places" :key="index">
             <td>Place ({{place["role"] }}): </td>  
             <td>{{place["name"]}}</td>
@@ -188,7 +219,32 @@
         </tr>
         <tr>
             <td>Repository:</td>
-            <td>{{ metadata.repository }}</td>
+            <td>{{ metadata.repository[0].name }}</td>
+            <td> 
+                <table>
+                <tr> <td v-if="metadata.repository[0].internal_id"> {{repository[0]["internal_id_preview"]}}</td></tr>
+                <tr v-if="!metadata.repository[0].internal_id" v-for="(candidate_repository, number) in metadata.repository[0].potential_candidates" :key="number">
+                <td> <input type="radio" v-bind:id="candidate_repository.preview" v-bind:value= "number" v-model="metadata.repository[0].chosen_candidate">
+                <label for="candidate_repository">{{ candidate_repository.preview }} </label>
+                </td></tr>
+                <tr v-if="!metadata.repository[0].internal_id"> 
+                    <td>
+                        or enter other GND number: <input v-model="new_authority_id_rep" /> 
+                        <div v-if="additional_repository_authority"> 
+                            <label for="new">{{ additional_repository_authority.preview }}</label></div>
+                        <button @click="loadNewRepositoryAuthorityRecord(new_authority_id_rep)">load</button>
+
+                </td></tr>
+
+
+            </table>
+            
+
+            
+
+            
+            </td>
+
         </tr>
         <tr>
             <td> Shelfmark:</td>
@@ -205,7 +261,7 @@
     </v-table>
 
     <p v-if="metadata.bibliographic_information"> {{ metadata.bibliographic_information[0] }}             </p>
-
+    <p v-if="metadata.repository"> {{ metadata.repository[0] }}             </p>
 
 <!--        
     </v-table>
@@ -280,8 +336,12 @@ export default {
             additional_bi: '',
             choice_experiment: '',
             choice_experiment2: '',
-            chosen_person1:'',
-            new_authority_id: []
+            chosen_person1: '',
+            new_authority_id: [],
+            new_authority_id_org: [],
+            candidate_person: '',
+            candidate_organisation: "",
+            new_authority_id_rep: ""
         };
     },
     methods: {
@@ -299,6 +359,8 @@ export default {
                     console.log(response.data)
                     this.metadata = response.data || ''
                     console.log(this.material)
+                    console.log(this.metadata)
+                    console.log(this.metadata.repository[0])
                 })            
         },
         createNewRessource(metadata) {
@@ -330,9 +392,9 @@ export default {
                 })
             
         },
-        loadNewAuthorityRecord(new_authority_id, index_persons) {
+        loadNewPersonAuthorityRecord(new_authority_id, index_persons) {
             console.log(this.new_authority_id)
-            const url = `${API_URL}/loadNewAuthorityRecord`
+            const url = `${API_URL}/loadNewPersonAuthorityRecord`
             return axios.get(url,
                 {
                     params: {
@@ -346,7 +408,41 @@ export default {
                     console.log(position)
                     this.metadata.bibliographic_information[0].persons[index_persons].chosen_candidate = position
                 })
+            },
+        loadNewOrganisationAuthorityRecord(new_authority_id, index_organisations) {
+            console.log(this.new_authority_id_org)
+            const url = `${API_URL}/loadNewOrganisationAuthorityRecord`
+            return axios.get(url,
+                {
+                    params: {
+                        new_authority_id_org: this.new_authority_id_org[index_organisations]
+                    }
+                }).then((response) =>  {
+                    console.log(response.data)
+                    this.additional_organisation_authority = response.data || ''                    
+                    this.metadata.bibliographic_information[0].organisations[index_organisations].potential_candidates.push(this.additional_organisation_authority[0])
+                    let position = this.metadata.bibliographic_information[0].organisations[index_organisations].potential_candidates.length -1
+                    console.log(position)
+                    this.metadata.bibliographic_information[0].organisations[index_organisations].chosen_candidate = position
+                })
 
+            },
+        loadNewRepositoryAuthorityRecord(new_authority_id_rep) {
+            console.log(this.new_authority_id_rep)
+            const url = `${API_URL}/loadNewRepositoryAuthorityRecord`
+            return axios.get(url,
+                {
+                    params: {
+                        new_authority_id_rep: this.new_authority_id_rep
+                    }
+                }).then((response) =>  {
+                    console.log(response.data)
+                    this.additional_repository_authority = response.data || ''                    
+                    this.metadata.repository[0].potential_candidates.push(this.additional_repository_authority[0])
+                    let position = this.metadata.repository[0].potential_candidates.length -1
+                    console.log(position)
+                    this.metadata.repository[0].chosen_candidate = position
+                })
         }
     
     }
