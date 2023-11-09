@@ -15,6 +15,7 @@
               <td>
                 <button @click="redirectToViewer(item.id)">View</button>
                 <button @click="redirectToDetails(item.id)">Details</button>    
+                <button @click="redirectToImageTest(item.id)">Get Images</button>    
             </td>
           </tr>
       </tbody>
@@ -68,6 +69,10 @@ export default {
         imageViewerStore.id=id
         console.log(imageViewerStore.id)
         this.$router.push({ path: 'detailView'})
+       },
+       redirectToImageTest(id){
+        imageViewerStore.id=id
+        this.$router.push({ path: 'imageTest'})    
        }
     }
 }

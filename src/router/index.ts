@@ -41,6 +41,11 @@ const router = createRouter({
       path: '/detailView',
       name: 'Detail View',
       component:  () => import('../views/DetailView.vue')
+    },
+    {
+        path: '/imageTest',
+        name: 'Image Test',
+        component: () => import('../views/ImageTest.vue')
     }
   ]
 })
