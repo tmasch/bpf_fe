@@ -121,7 +121,7 @@
                 <tr> <td v-if="metadata.bibliographic_information[0].organisations[index_organisations].internal_id"> {{organisation["internal_id_preview"]}} <span style="color:red"> {{ organisation.internal_id_organisation_type1_comment }}</span></td></tr>
                 <tr v-if="!metadata.bibliographic_information[0].organisations[index_organisations].internal_id" v-for="(candidate_organisation, number) in metadata.bibliographic_information[0].organisations[index_organisations].potential_candidates" :key="number">
                 <td> <input type="radio" v-bind:id="candidate_organisation.preview" v-bind:value= "number" v-model="metadata.bibliographic_information[0].organisations[index_organisations].chosen_candidate">
-                <label for="candidate_organisation">{{ candidate_organisation.preview }} </label>
+                <label for="candidate_organisation">{{ candidate_organisation.preview }} </label> <span style="color:red"> {{ candidate_organisation.internal_id_org_type1_comment }}</span>
                 </td></tr>
                 <tr v-if="!metadata.bibliographic_information[0].organisations[index_organisations].internal_id"> 
                     <td>
@@ -173,10 +173,10 @@
             <td style="vertical-align:top">{{ metadata.repository[0].name }}</td>
             <td> 
                 <table>
-                <tr> <td v-if="metadata.repository[0].internal_id"> {{repository[0]["internal_id_preview"]}} <span style="color:red"> {{ repository.internal_id_person_type1_comment }}</span></td></tr>
+                <tr> <td v-if="metadata.repository[0].internal_id"> {{repository[0]["internal_id_preview"]}} </td></tr>
                 <tr v-if="!metadata.repository[0].internal_id" v-for="(candidate_repository, number) in metadata.repository[0].potential_candidates" :key="number">
                 <td> <input type="radio" v-bind:id="candidate_repository.preview" v-bind:value= "number" v-model="metadata.repository[0].chosen_candidate">
-                <label for="candidate_repository">{{ candidate_repository.preview }} </label>
+                <label for="candidate_repository">{{ candidate_repository.preview }} <span style="color:red"> {{ candidate_repository.internal_id_org_type1_comment }}</span></label>
                 </td></tr>
                 <tr v-if="!metadata.repository[0].internal_id"> 
                     <td>
@@ -354,7 +354,8 @@ export default {
             return axios.get(url,
                 {
                     params: {
-                        new_authority_id_org: this.new_authority_id_org[index_organisations]
+                        new_authority_id_org: this.new_authority_id_org[index_organisations],
+                        new_organisation_role: this.metadata.bibliographic_information[0].organisations[index_organisatins].role
                     }
                 }).then((response) =>  {
                     console.log(response.data)
