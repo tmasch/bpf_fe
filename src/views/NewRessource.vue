@@ -118,7 +118,7 @@
             <td style="vertical-align:top">{{organisation["name"]}} <span v-if="metadata.bibliographic_information[0].organisations[index_organisations].id">({{organisation["id_name"]}} {{organisation["id"]}}) </span></td>
             <td> 
                 <table>
-                <tr> <td v-if="metadata.bibliographic_information[0].organisations[index_organisations].internal_id"> {{organisation["internal_id_preview"]}} <span style="color:red"> {{ organisation.internal_id_organisation_type1_comment }}</span></td></tr>
+                <tr> <td v-if="metadata.bibliographic_information[0].organisations[index_organisations].internal_id"> {{organisation["internal_id_preview"]}} <span style="color:red"> {{ organisation.internal_id_org_type1_comment }}</span></td></tr>
                 <tr v-if="!metadata.bibliographic_information[0].organisations[index_organisations].internal_id" v-for="(candidate_organisation, number) in metadata.bibliographic_information[0].organisations[index_organisations].potential_candidates" :key="number">
                 <td> <input type="radio" v-bind:id="candidate_organisation.preview" v-bind:value= "number" v-model="metadata.bibliographic_information[0].organisations[index_organisations].chosen_candidate">
                 <label for="candidate_organisation">{{ candidate_organisation.preview }} </label> <span style="color:red"> {{ candidate_organisation.internal_id_org_type1_comment }}</span>
@@ -140,14 +140,22 @@
         </tr>
 <!-- Section on places -->            
         <tr v-if="metadata.bibliographic_information[0]" v-for="(place, index_places) in metadata.bibliographic_information[0].places" :key="index_places">
-            <td style="vertical-align:top">Place ({{place["role"] }}): </td>  
+            <td v-if="place.role=='pup' || place.role== 'mfp'" style="vertical-align:top"> Place (
+                <input type="radio" id="place_of_publication" value="pup" v-model="metadata.bibliographic_information[0].places[index_places].role">
+                <label for="place_of_publication"> Place of Publication</label>
+                <input type="radio" id="place_of_printing" value="mfp" v-model="metadata.bibliographic_information[0].places[index_places].role">
+                <label for="place_of_printing"> Place of Printing)</label>
+
+                </td>  
+            <td v-else> Places ({{ place["role"] }})</td>
+
             <td style="vertical-align:top">{{place["name"]}} <span v-if="metadata.bibliographic_information[0].places[index_places].id"> ({{place["id_name"]}} {{place["id"]}})</span></td>
             <td> 
                 <table>
-                <tr v-if="metadata.bibliographic_information[0].places[index_places].internal_id"> <td> {{places["internal_id_preview"]}}</td></tr>
+                <tr v-if="metadata.bibliographic_information[0].places[index_places].internal_id"> <td> {{places["internal_id_preview"]}}<span style="color:red"> {{ place.internal_id_place_type1_comment }}</span></td></tr>
                 <tr v-if="!metadata.bibliographic_information[0].places[index_places].internal_id" v-for="(candidate_place, number) in metadata.bibliographic_information[0].places[index_places].potential_candidates" :key="number">
-                <td> <input type="radio" v-bind:id="candidate_places.preview" v-bind:value= "number" v-model="metadata.bibliographic_information[0].places[index_places].chosen_candidate">
-                <label for="candidate_place">{{ candidate_place.preview }} </label>
+                <td> <input type="radio" v-bind:id="candidate_place.preview" v-bind:value= "number" v-model="metadata.bibliographic_information[0].places[index_places].chosen_candidate">
+                <label for="candidate_place">{{ candidate_place.preview }} <span style="color:red"> {{ candidate_place.internal_id_place_type1_comment }}</span></label>
                 </td></tr>
                 <tr v-if="!metadata.bibliographic_information[0].places[index_places].internal_id"> 
                     <td>
@@ -276,7 +284,7 @@ export default {
             new_authority_id_place: [],
             candidate_person: '',
             candidate_organisation: "",
-            candidate_places: '',
+            candidate_place: '',
             new_authority_id_rep: ""
             
         };
@@ -355,7 +363,7 @@ export default {
                 {
                     params: {
                         new_authority_id_org: this.new_authority_id_org[index_organisations],
-                        new_organisation_role: this.metadata.bibliographic_information[0].organisations[index_organisatins].role
+                        new_organisation_role: this.metadata.bibliographic_information[0].organisations[index_organisations].role
                     }
                 }).then((response) =>  {
                     console.log(response.data)
@@ -372,9 +380,11 @@ export default {
             return axios.get(url,
                 {
                     params: {
-                        new_authority_id_place: this.new_authority_id_place[index_places]
+                        new_authority_id_place: this.new_authority_id_place[index_places],
+                        new_place_role: this.metadata.bibliographic_information[0].places[index_places].role
                     }
                 }).then((response) =>  {
+                    console.log("Response for adding an additional place")
                     console.log(response.data)
                     this.additional_organisation_authority = response.data || ''                    
                     this.metadata.bibliographic_information[0].places[index_places].potential_candidates.push(this.additional_organisation_authority[0])
