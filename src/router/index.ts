@@ -46,7 +46,32 @@ const router = createRouter({
         path: '/imageTest',
         name: 'Image Test',
         component: () => import('../views/ImageTest.vue')
-    }
+    },
+    {
+      path: '/recordViewBook',
+      name: 'Record View Book',
+      component: () => import('../views/RecordViewBook.vue')
+    },
+    {
+      path: '/recordViewManuscript',
+      name: 'Record View Manuscript',
+      component: () => import('../views/RecordViewManuscript.vue')
+  },
+  {
+    path: '/recordViewPerson',
+    name: 'Record View Person',
+    component : () => import('../views/RecordViewPerson.vue')
+  },
+  {
+    path: '/recordViewOrg',
+    name: 'Record View Organisation',
+    component : () => import('../views/RecordViewOrg.vue')
+  },
+  {
+    path: '/recordViewPlace',
+    name: 'Record View Place',
+    component : () => import('../views/RecordViewPlace.vue')
+  }
   ]
 })
 

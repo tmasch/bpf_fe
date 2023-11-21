@@ -10,12 +10,15 @@
     <table class="table">
       <tbody>
           <tr v-for="(item, index) in items" :key="index">
-              <td :key="indexColumn">{{item.bibliographic_information[0].title}}</td>
+              <td :key="indexColumn">{{item.type}}</td>
+              <td :key="indexColumn">{{item.preview}}</td>
               <td :key="indexColumn">{{item.id}}</td>
               <td>
                 <button @click="redirectToViewer(item.id)">View</button>
                 <button @click="redirectToDetails(item.id)">Details</button>    
-                <button @click="redirectToImageTest(item.id)">Get Images</button>    
+                <button @click="redirectToImageTest(item.id)">Get Images</button>
+                <button @click="redirectToRecordViewBook(item.id)" v-if="item.type=='Book'">Book</button>
+                <button @click="redirectToRecordViewManuscript(item.id)" v-if="item.type=='Manuscript'">Manuscript</button>                    
             </td>
           </tr>
       </tbody>
@@ -73,6 +76,16 @@ export default {
        redirectToImageTest(id){
         imageViewerStore.id=id
         this.$router.push({ path: 'imageTest'})    
+       },
+       redirectToRecordViewBook(id){
+        console.log(id)
+        imageViewerStore.id = id
+        this.$router.push({ path: 'RecordViewBook'})
+    },
+       redirectToRecordViewManuscript(id){
+        console.log(id)
+        imageViewerStore.id = id
+        this.$router.push({ path: 'RecordViewManuscript'})
        }
     }
 }
