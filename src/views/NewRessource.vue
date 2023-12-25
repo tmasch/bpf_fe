@@ -152,7 +152,7 @@
             <td style="vertical-align:top">{{place["name"]}} <span v-if="metadata.bibliographic_information[0].places[index_places].id"> ({{place["id_name"]}} {{place["id"]}})</span></td>
             <td> 
                 <table>
-                <tr v-if="metadata.bibliographic_information[0].places[index_places].internal_id"> <td> {{places["internal_id_preview"]}}<span style="color:red"> {{ place.internal_id_place_type1_comment }}</span></td></tr>
+                <tr v-if="metadata.bibliographic_information[0].places[index_places].internal_id"> <td> {{place["internal_id_preview"]}}<span style="color:red"> {{ place.internal_id_place_type1_comment }}</span></td></tr>
                 <tr v-if="!metadata.bibliographic_information[0].places[index_places].internal_id" v-for="(candidate_place, number) in metadata.bibliographic_information[0].places[index_places].potential_candidates" :key="number">
                 <td> <input type="radio" v-bind:id="candidate_place.preview" v-bind:value= "number" v-model="metadata.bibliographic_information[0].places[index_places].chosen_candidate">
                 <label for="candidate_place">{{ candidate_place.preview }} <span style="color:red"> {{ candidate_place.internal_id_place_type1_comment }}</span></label>
