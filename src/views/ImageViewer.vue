@@ -64,6 +64,7 @@ export default {
 ///      console.log(d)
   //    console.log(d.images)
       var source = []
+      var overlays = []
 //      for (let image in d.images){
       d.images.forEach(function (image){
 //        console.log("images")
@@ -72,6 +73,28 @@ export default {
    //     console.log(url)
         var im = { type: "image", url : url}
         source.push(im)
+        console.log("frames")
+        var frames = []
+        if(image.frames){
+//          console.log(image.frames)
+          console.log("loop through frames")
+          image.frames.forEach(function (frame){
+            console.log(frame)
+          var f = {
+            px : frame.x_abs,
+            py : frame.y_abs,
+            width : frame.w_abs,
+            height : frame.h_abs
+          } 
+          console.log(f)
+          frames.push(f)
+          })
+          console.log("end loop")
+        }
+        overlays.push(frames)
+        console.log(overlays)
+
+
      })
 //     console.log(source)
       // var source = [
@@ -81,7 +104,7 @@ export default {
       //       "https://iiif.bodleian.ox.ac.uk/iiif/image/0ef4d2de-02ec-4837-a3ab-51c59bb81d65/full/1500,/0/default.jpg"
       //   }
       // ];
-      this.viewer = OpenSeadragon({
+      var viewer = OpenSeadragon({
         id: "osd",
         prefixUrl: "//openseadragon.github.io/openseadragon/images/",
         showNavigator: true,
@@ -89,6 +112,35 @@ export default {
     showReferenceStrip: true,
             tileSources: source
       });
+      viewer.addHandler('open', function() {
+        overlays.forEach(function(frames, setIndex) {
+          var tiledImage = viewer.world.getItemAt(setIndex);
+          if (!frames || !tiledImage) {
+            console.log("no overlays")
+            return;
+          }
+          
+          frames.forEach(function(overlay) {
+//            console.log(o)
+//            if (o) {
+ //           o.forEach(function(overlay){
+            var rect = new OpenSeadragon.Rect(overlay.px, overlay.py, overlay.width, overlay.height);
+            rect = tiledImage.imageToViewportRectangle(rect);
+            overlay.x = rect.x;
+            overlay.y = rect.y;
+            overlay.width = rect.width;
+            overlay.height = rect.height;
+            overlay.className = 'frame';
+//className: 'highlight'
+            delete overlay.px;
+            delete overlay.py;
+            viewer.addOverlay(overlay);
+   //         });
+    //      }
+          });
+        })
+      });
+      this.viewer=viewer
       //this.viewer.initializeAnnotations()
       /* OpenSeadragon({
         animationTime: 0.4,

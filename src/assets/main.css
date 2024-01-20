@@ -28,3 +28,30 @@ a,
     padding: 0 2rem;
   }
 }
+
+
+.frame {
+  background-color:powderblue;
+  border: 2px solid black;
+  outline-width: 11.8833333333333px;
+  outline-style: solid;
+  outline-color: red;
+}
+
+.frame{
+  opacity:    0.4;
+  filter:     alpha(opacity=40);
+  outline:    2px solid #900;
+  background-color: #900;
+}
+.frame{
+  opacity:    0.4;
+  filter:     alpha(opacity=40);
+  outline:    12px auto #0A7EbE;
+  background-color: white;
+}
+.frame:hover, .frame:focus{
+  filter:     alpha(opacity=70);
+  opacity:    0.7;
+  background-color: transparent;
+}

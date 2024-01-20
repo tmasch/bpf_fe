@@ -47,7 +47,7 @@ export default {
             const url = `${API_URL}/findImages`
 //            console.log(url)
 //            id="TnvkOePmvMo3cUDoJLalS"
-            console.log("getting ressource")
+            console.log("getting images")
             console.log(id)
             try{ 
             const response = await axios.get(url,
@@ -55,7 +55,7 @@ export default {
                 {}
                 )
                 //.then((response) => {
-                  //  console.log("response now")
+                    console.log("response now")
                //    console.log(response.data)
                     //this.items = response.data || ''
                // })
