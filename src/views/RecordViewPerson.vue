@@ -52,8 +52,10 @@
 <h3>Dates</h3>
 <v-table>
   <tr v-for="(date, dates_index) in record.dates_from_source" :key="dates_index">
-    <td> {{ date.datetype }}</td>
-    <td> {{ date.datestring }}</td>
+    <td v-if="date.date_aspect=='a'">active </td>
+    <td> {{ date.datestring }} </td>
+    <td> ({{date.date_start[0]}}-{{date.date_start[1]}}-{{date.date_start[2]}} - {{date.date_end[0]}}-{{date.date_end[1]}}-{{date.date_end[2]}})</td>
+    <td>; source: {{ date.datetype }} {{ date.datestring_raw }}</td>
   </tr>
 </v-table>
 <br>
