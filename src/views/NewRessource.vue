@@ -218,6 +218,115 @@
             <td><a :href="metadata.iiifUrl" target="_blank">{{ metadata.iiifUrl }}</a></td>
         </tr>
     </v-table>
+    
+    <!--The following is the desplay for manually added information on the making process-->
+    <span v-if="metadata && additional_information_added==true">
+        <h3>This information will be added to the individual Artwork records: </h3>
+        <v-table>
+        <tr>
+            <td width = 220></td>
+            <td width = 450></td>
+            <td width = 450></td>
+        </tr>
+
+        <span v-for="(making_process, making_process_number) in metadata.making_processes" :key="making_process_number">
+            <span v-if ="metadata.making_processes[making_process_number].person.name || metadata.making_processes[making_process_number].place.name || metadata.making_processes[making_process_number].date.datestring_raw">
+        <tr>
+            <td width = 220>{{ metadata.making_processes[making_process_number].process_number }} {{ metadata.making_processes[making_process_number].process_type }}</td>
+            <td width = 450> </td>
+        </tr>
+        <tr v-if="metadata.making_processes[making_process_number].place.name">
+            <td style="vertical-align:top"> Place </td>
+            <td style="vertical-align:top">{{ metadata.making_processes[making_process_number].place.name }}</td>
+        
+        <td> 
+                <table>
+                <tr v-if="making_process.place.internal_id"> <td style="vertical-align:top"> {{making_process.place["internal_id_preview"]}}<span style="color:red"> {{ making_process.place.internal_id_place_type1_comment }}</span></td></tr>
+                <tr v-if="!making_process.place.internal_id" v-for="(candidate_place, number) in making_process.place.potential_candidates" :key="number">
+                <td style="vertical-align:top"> <input type="radio" v-bind:id="candidate_place.preview" v-bind:value= "number" v-model="making_process.place.chosen_candidate">
+                <label for="candidate_place">{{ candidate_place.preview }} <span style="color:red"> {{ candidate_place.internal_id_place_type1_comment }}</span></label>
+                </td></tr></table>
+        </td>
+
+        </tr>
+            </span>
+        </span>
+    </v-table>
+    </span>
+    
+    
+
+    
+    <span v-if="metadata && material == 'm' && additional_information_added==false">
+        <h3>Please enter additional information relevant for all images from this manuscript: </h3>
+        <v-table>
+            <tr>
+                <td>Process {{ metadata.making_processes[0].process_number }}: </td>
+                <td>{{ metadata.making_processes[0].process_type }}</td>
+            </tr>
+            <tr>
+                <td>Artist: </td>
+                <td><input v-model="metadata.making_processes[0].person.name"></td>
+            </tr>
+            <tr>
+                <td>Place: </td>
+                <td><input v-model="metadata.making_processes[0].place.name"></td>
+            </tr>
+            <tr>
+                <td>Time: </td>
+                <td><input v-model="metadata.making_processes[0].date.datestring_raw"></td>
+                <td>
+                    <button @click="$event => submitAdditionalInformation(metadata.making_processes, additional_information_added)">
+                        Submit
+                    </button>
+                </td>
+            </tr>
+        </v-table>
+        </span>
+        <span v-if="metadata && material == 'b' && additional_information_added==false">
+        <h3>Please enter additional information relevant for all images from this book: </h3>
+        <v-table>
+            <tr>
+                <td>Process {{ metadata.making_processes[0].process_number }}: </td>
+                <td>{{ metadata.making_processes[0].process_type }}</td>
+            </tr>
+            <tr>
+                <td>Artist: </td>
+                <td><input v-model="metadata.making_processes[0].person.name"></td>
+            </tr>
+            <tr>
+                <td>Place: </td>
+                <td><input v-model="metadata.making_processes[0].place.name"></td>
+            </tr>
+            <tr>
+                <td>Time: </td>
+                <td><input v-model="metadata.making_processes[0].date.datestring_raw"></td>
+            </tr>    
+            <p></p>
+            <tr>
+                <td>Process {{ metadata.making_processes[1].process_number }}: </td>
+                <td>{{ metadata.making_processes[1].process_type }}</td>
+            </tr>
+            <tr>
+                <td>Artist: </td>
+                <td><input v-model="metadata.making_processes[1].person.name"></td>
+            </tr>
+            <tr>
+                <td>Place: </td>
+                <td><input v-model="metadata.making_processes[1].place.name"></td>
+            </tr>
+            <tr>
+                <td>Time: </td>
+                <td><input v-model="metadata.making_processes[1].date.datestring_raw"></td>
+                <td>
+                    <button @click="$event => submitAdditionalInformation(metadata.making_processes, additional_information_added)">
+                        Submit
+                    </button>
+                </td>
+            </tr>
+        </v-table>
+        </span>
+        <p></p>
 
 
 
@@ -285,7 +394,8 @@ export default {
             candidate_person: '',
             candidate_organisation: "",
             candidate_place: '',
-            new_authority_id_rep: ""
+            new_authority_id_rep: "",
+            additional_information_added: false
             
         };
     },
@@ -317,6 +427,7 @@ export default {
                 metadata
                 ).then((response) => {
                     console.log(response.data)
+                    this.additional_information_added = false
                     this.message = response.data || ''
                 })
         },
@@ -411,6 +522,18 @@ export default {
                     this.metadata.repository[0].chosen_candidate = position
                 })
         },
+        submitAdditionalInformation(making_processes) {
+            const url = `${API_URL}/submitAdditionalInformation`
+            console.log(url)
+            console.log(making_processes)
+            return axios.post(url, making_processes
+                ).then((response) => {
+                    console.log(response.data)
+                    this.additional_information_added = true
+                    this.metadata.making_processes = response.data
+                })
+
+        },
         saveConnectedRecords(metadata) {
             const url = `${API_URL}/saveConnectedRecords`
             console.log(url)
@@ -422,10 +545,7 @@ export default {
                     console.log(response.data)
                     this.message = response.data || ''
                 })
-
-
-
-    }
+        }
     
     
     }
