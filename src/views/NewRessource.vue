@@ -235,6 +235,20 @@
             <td width = 220>{{ metadata.making_processes[making_process_number].process_number }} {{ metadata.making_processes[making_process_number].process_type }}</td>
             <td width = 450> </td>
         </tr>
+        <tr v-if="metadata.making_processes[making_process_number].person.name">
+            <td style="vertical-align:top"> Person </td>
+            <td style="vertical-align:top">{{ metadata.making_processes[making_process_number].person.name }}</td>
+        
+        <td> 
+                <table>
+                <tr v-if="making_process.person.internal_id"> <td style="vertical-align:top"> {{making_process.person["internal_id_preview"]}}<span style="color:red"> {{ making_process.place.internal_id_person_type1_comment }}</span></td></tr>
+                <tr v-if="!making_process.person.internal_id" v-for="(candidate_person, number) in making_process.person.potential_candidates" :key="number">
+                <td style="vertical-align:top"> <input type="radio" v-bind:id="candidate_person.preview" v-bind:value= "number" v-model="making_process.person.chosen_candidate">
+                <label for="candidate_person">{{ candidate_person.preview }} <span style="color:red"> {{ candidate_person.internal_id_person_type1_comment }}</span></label>
+                </td></tr></table>
+        </td>
+
+        </tr>
         <tr v-if="metadata.making_processes[making_process_number].place.name">
             <td style="vertical-align:top"> Place </td>
             <td style="vertical-align:top">{{ metadata.making_processes[making_process_number].place.name }}</td>
