@@ -1,6 +1,6 @@
 <template>
     <div>
-        <h1>List of Ressources</h1>
+        <h1>List of Resources</h1>
     </div>
 
     <button @click="$event => getRessources()">

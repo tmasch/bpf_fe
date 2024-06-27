@@ -7,7 +7,7 @@
       <tr v-for="(single_bibliographic_id, bibliographic_id_index) in record.bibliographic_id" :key ="bibligraphic_id_index">
       <td> {{single_bibliographic_id.name}}</td>
       <td> {{single_bibliographic_id.id}}</td>
-      <td v-if="single_bibliographic_id.uri"><a v-bind:href="single_bibliographic_id.uri" target="_blank">Link</a></td>
+      <td v-if="single_bibliographic_id.uri"><a v-bind:href="single_bibliographic_id.uri" target="_blank"><button>Link</button></a></td>
 
       </tr>
       <tr>

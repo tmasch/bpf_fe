@@ -7,6 +7,7 @@
       <tr v-for="(single_external_id, external_id_index) in record.external_id" :key ="external_id_index">
       <td> {{single_external_id.name}}</td>
       <td> {{single_external_id.id}}</td>
+      <td v-if="single_external_id.uri"><a v-bind:href="single_external_id.uri" target="_blank"><button>Link</button></a></td>
       </tr>
       <tr>
         <td>Person id: </td>
@@ -68,10 +69,12 @@
     <h3>Connected Persons</h3>
     <v-table>
       <tr v-for="(single_person, person_index) in record.connected_persons" :key="person_index">
-      <td>{{ single_person.name }}</td>
-      <td v-if="single_person.connection_type">({{ single_person.connection_type }})</td>
+      <td v-if="single_person.connection_type">{{ single_person.connection_type }}</td>
       <td v-if="single_person.connection_time">({{ single_person.connection_time }})</td>      
+      <td>{{ single_person.name }}</td>
       <td v-if="single_person.connection_comment">({{ single_person.connection_comment }})</td>
+      <td v-if="single_person.id">({{ single_person.id }}) </td>
+      <td v-if="single_person.id"><button @click="showPersonRecord(single_person.id)">Show connected person</button> </td>
       </tr>
     </v-table>
     <br>
@@ -145,7 +148,8 @@ export default {
   data() {
     return {
       id : '',
-      record : ''
+      record : '',
+      single_person : ''
     };
   },  mounted() {
     this.initDetails();
@@ -185,6 +189,15 @@ export default {
                 } catch (e)
                 {console.log(e)}
     },
+    showPersonRecord(single_person){
+      console.log("single_person: ")
+      console.log(single_person)
+      personViewerStore.id = single_person
+      console.log("ID in Book vue: ")
+      console.log(personViewerStore.id)
+      this.$router.push({ path: 'RecordViewPerson'})
+    },
+
     goBack() {
       console.log(imageViewerStore.id)
       this.$router.push({ path: 'RecordViewBook'})

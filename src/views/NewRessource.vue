@@ -26,7 +26,7 @@
 
 -->
 <div>
-        <h1>Create new ressource</h1>
+        <h1>Create new resource</h1>
     </div>
     <div>
         iiif manifest url  <input v-model="iiifUrl" />   

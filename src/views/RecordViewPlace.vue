@@ -7,6 +7,7 @@
       <tr v-for="(single_external_id, external_id_index) in record.external_id" :key ="external_id_index">
       <td> {{single_external_id.name}}</td>
       <td> {{single_external_id.id}}</td>
+      <td v-if="single_external_id.uri"><a v-bind:href="single_external_id.uri" target="_blank"><button>Link</button></a></td>
       </tr>
     </v-table>
     </span>
