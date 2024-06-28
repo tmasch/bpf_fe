@@ -197,6 +197,7 @@ export default {
     },
     goBack() {
       console.log(imageViewerStore.id)
+      personViewerStore.id = personViewerStore.id_old
       this.$router.push({ path: 'RecordViewBook'})
     }
 }

@@ -180,8 +180,16 @@ export default {
                 {console.log(e)}
     },
     goBack() {
-      console.log(imageViewerStore.id)
-      this.$router.push({ path: 'RecordViewBook'})
+      console.log("type of page to return to: ")
+      console.log(personViewerStore.type_old)      
+      personViewerStore.id = personViewerStore.id_old
+      if(personViewerStore.type_old == "manuscript") {
+        console.log("Going towards manuscript")
+        this.$router.push({ path: 'RecordViewManuscript'})}
+      if(personViewerStore.type_old == "book") {
+        console.log("Going towards printer book")
+        this.$router.push({ path: 'RecordViewBook'})}
+
     }
 }
 }

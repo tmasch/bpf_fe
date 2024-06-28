@@ -37,11 +37,11 @@
     <br>
     <br>
 
-<span v-if="record.printing_date">
+<span v-if="record.date_string">
 <h3>Date</h3>
 <v-table>
   <tr>
-    <td>          {{ record.printing_date }}</td>
+    <td>{{ record.date_string }} ({{ record.date_start[0] }}-{{record.date_start[1]}}-{{record.date_start[2]}} - {{ record.date_end[0] }}-{{ record.date_end[1] }}-{{ record.date_end[2] }})</td>
   </tr>
 </v-table>
 <br>
@@ -138,6 +138,7 @@ export default {
       console.log(record)
       this.id = imageViewerStore.id
       this.record = record
+      personViewerStore.type_old = "book" // this determines, if a return from a person, organisation etc. file will go to a 'manuscript' record or a 'book' record
     },
     getBookRecord: async function(id)  {
             const url = `${API_URL}/getBookRecord`
@@ -165,6 +166,9 @@ export default {
     showPersonRecord(single_person){
       console.log("single_person: ")
       console.log(single_person)
+      console.log("current record: ")
+      console.log(personViewerStore.id)
+      personViewerStore.id_old = personViewerStore.id
       personViewerStore.id = single_person
       console.log("ID in Book vue: ")
       console.log(personViewerStore.id)
@@ -173,6 +177,7 @@ export default {
     showOrgRecord(single_org){
       console.log("single_org: ")
       console.log(single_org)
+      personViewerStore.id_old = personViewerStore.id
       personViewerStore.id = single_org
       console.log("ID in Book vue: ")
       console.log(personViewerStore.id)
@@ -181,6 +186,7 @@ export default {
     showPlaceRecord(single_place){
       console.log("single_place: ")
       console.log(single_place)
+      personViewerStore.id_old = personViewerStore.id
       personViewerStore.id = single_place
       console.log("ID in Book vue: ")
       console.log(personViewerStore.id)

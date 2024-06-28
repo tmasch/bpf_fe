@@ -2,11 +2,11 @@
     <div>
         <h1>List of Resources</h1>
     </div>
-
+<!--
     <button @click="$event => getRessources()">
        Get ressources
     </button>
-
+-->
     <table class="table">
       <tbody>
           <tr v-for="(item, index) in items" :key="index">
@@ -49,7 +49,8 @@ export default {
         return {
             items: ''
         };
-    },
+    },  mounted() {
+        this.getRessources()},
     methods: {
         getRessources() {
             const url = `${API_URL}/allRessources`

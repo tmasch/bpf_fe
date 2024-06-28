@@ -174,7 +174,7 @@
         </tr>
         <tr v-if="metadata.bibliographic_information[0]">
             <td>Date:</td>
-            <td>{{ metadata.bibliographic_information[0].printing_date }}</td>
+            <td>{{ metadata.bibliographic_information[0].date_string }} ({{metadata.bibliographic_information[0].date_start[0]}}-{{ metadata.bibliographic_information[0].date_start[1] }}-{{ metadata.bibliographic_information[0].date_start[2] }} - {{metadata.bibliographic_information[0].date_end[0]}}-{{ metadata.bibliographic_information[0].date_end[1] }}-{{ metadata.bibliographic_information[0].date_end[2] }})</td>
         </tr>
         <tr>
             <td style="vertical-align:top">Repository:</td>

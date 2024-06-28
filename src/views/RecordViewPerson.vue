@@ -73,8 +73,7 @@
       <td v-if="single_person.connection_time">({{ single_person.connection_time }})</td>      
       <td>{{ single_person.name }}</td>
       <td v-if="single_person.connection_comment">({{ single_person.connection_comment }})</td>
-      <td v-if="single_person.id">({{ single_person.id }}) </td>
-      <td v-if="single_person.id"><button @click="showPersonRecord(single_person.id)">Show connected person</button> </td>
+      <td v-if="single_person.id"><button @click="showConnectedPersonRecord(single_person.id)">Show connected person</button> </td>
       </tr>
     </v-table>
     <br>
@@ -153,6 +152,10 @@ export default {
     };
   },  mounted() {
     this.initDetails();
+//  }, watch: {
+//    loadNewPerson {if (loadNewPerson == true) {
+//      console.log("loading new person")
+//      this.initDetails}}
   },
   methods: {
         async initDetails() {
@@ -189,17 +192,22 @@ export default {
                 } catch (e)
                 {console.log(e)}
     },
-    showPersonRecord(single_person){
+    showConnectedPersonRecord(single_person){
       console.log("single_person: ")
       console.log(single_person)
       personViewerStore.id = single_person
+//      let loadNewPerson = true
       console.log("ID in Book vue: ")
       console.log(personViewerStore.id)
-      this.$router.push({ path: 'RecordViewPerson'})
+      this.initDetails()
+      //this.$router.push({ path: 'RecordViewPerson'})
     },
 
     goBack() {
+      console.log("Old address for going back: ")
+      console.log(personViewerStore.id_old)
       console.log(imageViewerStore.id)
+      personViewerStore.id = personViewerStore.id_old
       this.$router.push({ path: 'RecordViewBook'})
     }
 }

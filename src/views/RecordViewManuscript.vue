@@ -67,6 +67,7 @@ export default {
       const record= await this.getManuscriptRecord(imageViewerStore.id)
       console.log(record)
       this.id = imageViewerStore.id
+      personViewerStore.type_old = "manuscript" // this determines, if a return from a person, organisation etc. file will go to a 'manuscript' record or a 'book' record
       this.record = record
     },
     getManuscriptRecord: async function(id)  {
@@ -95,6 +96,7 @@ export default {
     showOrgRecord(repository){
       console.log("single_org: ")
       console.log(repository)
+      personViewerStore.id_old = personViewerStore.id
       personViewerStore.id = repository
       console.log("ID in Book vue: ")
       console.log(personViewerStore.id)
