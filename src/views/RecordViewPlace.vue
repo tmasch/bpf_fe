@@ -80,10 +80,11 @@
     <h3>Connected Persons</h3>
     <v-table>
       <tr v-for="(single_person, person_index) in record.connected_persons" :key="person_index">
+      <td v-if="single_person.connection_type">{{ single_person.connection_type }} </td>
       <td>{{ single_person.name }}</td>
-      <td v-if="single_person.connection_type">({{ single_person.connection_type }})</td>
       <td v-if="single_person.connection_time">({{ single_person.connection_time }})</td>      
       <td v-if="single_person.connection_comment">({{ single_person.connection_comment }})</td>
+      <td v-if="single_person.id"><button @click="showConnectedPersonRecord(single_person.id)">Show connected person</button> </td>
       </tr>
     </v-table>
     <br>
@@ -195,6 +196,13 @@ export default {
                 } catch (e)
                 {console.log(e)}
     },
+    showConnectedPersonRecord(single_person){
+      console.log("single_person: ")
+      console.log(single_person)
+      personViewerStore.id = single_person
+      this.$router.push({ path: 'RecordViewPerson'})
+    },
+
     goBack() {
       console.log(imageViewerStore.id)
       personViewerStore.id = personViewerStore.id_old
