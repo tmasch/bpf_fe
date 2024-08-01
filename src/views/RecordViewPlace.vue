@@ -82,8 +82,8 @@
       <tr v-for="(single_person, person_index) in record.connected_persons" :key="person_index">
       <td v-if="single_person.connection_type">{{ single_person.connection_type }} </td>
       <td>{{ single_person.name }}</td>
-      <td v-if="single_person.connection_comment">({{ single_person.connection_comment }})</td>
-      <td v-if="single_person.connection_time">({{ single_person.connection_time }})</td>      
+      <td><div v-if="single_person.connection_comment">({{ single_person.connection_comment }})</div></td>
+      <td><div v-if="single_person.connection_time">({{ single_person.connection_time }})</div></td>      
       <td v-if="single_person.id"><button @click="showConnectedPersonRecord(single_person.id)">Show connected person</button> </td>
       </tr>
     </v-table>
@@ -96,10 +96,10 @@
     <h3>Connected Organisations</h3>
     <v-table v-if="record.connected_organisations.length">
       <tr v-for="(single_organisation, organisation_index) in record.connected_organisations" :key="organisation_index">
-      <td v-if="single_organisation.connection_type">({{ single_organisation.connection_type }})</td>      
+      <td v-if="single_organisation.connection_type">{{ single_organisation.connection_type }}</td>      
       <td>{{ single_organisation.name }}</td>
-      <td v-if ="single_organisation.connection_comment">({{ single_organisation.connection_comment }})</td>      
-      <td v-if="single_organisation.connection_time">({{ single_organisation.connection_time }})</td>            
+      <td><div v-if ="single_organisation.connection_comment">({{ single_organisation.connection_comment }})</div></td>      
+      <td><div v-if="single_organisation.connection_time">({{ single_organisation.connection_time }})</div></td>            
       <td v-if="single_organisation.id"><button @click="showConnectedOrgRecord(single_organisation.id)">Show connected organisation</button> </td>
     </tr>
       
@@ -116,8 +116,8 @@
       <tr v-for="(single_place, place_index) in record.connected_locations" :key="place_index">
       <td v-if="single_place.connection_type">({{ single_place.connection_type }})</td>
       <td>{{ single_place.name }}</td>
-      <td v-if="single_place.connection_comment">({{ single_place.connection_comment }})</td>
-      <td v-if="single_place.connection_time">({{ single_place.connection_time }})</td>
+      <td><div v-if="single_place.connection_comment">({{ single_place.connection_comment }})</div></td>
+      <td><div v-if="single_place.connection_time">({{ single_place.connection_time }})</div></td>
     
       <td v-if="single_place.id"><button @click="showConnectedPlaceRecord(single_place.id)">Show connected organisation</button> </td>
     </tr>

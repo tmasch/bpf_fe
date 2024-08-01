@@ -263,6 +263,24 @@
         </td>
 
         </tr>
+        <tr v-if="metadata.making_processes[making_process_number].date.datestring">
+            <td style="vertical-align:top"> Date </td>
+            <td style="vertical-align:top">{{ metadata.making_processes[making_process_number].date.datestring_raw }}</td>
+        <td>
+            <table>
+                <tr> 
+                    {{ metadata.making_processes[making_process_number].date.datestring }}
+                </tr>        
+                <tr>
+                    {{ metadata.making_processes[making_process_number].date.date_start }} - {{ metadata.making_processes[making_process_number].date.date_end }}
+                </tr>
+            </table>
+
+        </td>
+
+
+
+        </tr>
             </span>
         </span>
     </v-table>
