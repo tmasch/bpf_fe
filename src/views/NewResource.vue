@@ -439,7 +439,7 @@ export default {
             return axios.get(url,
                 {
                     params: {
-                        iiifUrl: this.iiifUrl,
+                        iiif_url: this.iiifUrl,
                         material: this.material
                     }
                 }).then((response) => {
