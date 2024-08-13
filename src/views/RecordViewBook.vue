@@ -148,7 +148,7 @@ export default {
             console.log(id)
             try{ 
             const response = await axios.get(url,
-                {params: {id : id} },
+                {params: {identifier : id} },
                 {}
                 )
                 //.then((response) => {
