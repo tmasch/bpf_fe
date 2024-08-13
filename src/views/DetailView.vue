@@ -6,7 +6,7 @@
     </tr>
 </template>
 
-<script>
+<script lang="ts">
 import { useImageViewerStore } from '@/stores/ImageViewerStore'
 const imageViewerStore = useImageViewerStore()
 
@@ -36,20 +36,20 @@ export default {
         async initDetails() {
       console.log("ID")
       console.log(imageViewerStore.id)
-      const d= await this.getRessource(imageViewerStore.id)
+      const d= await this.getResource(imageViewerStore.id)
       console.log(d)
       this.id = imageViewerStore.id
       this.d = d
     },
-    getRessource: async function(id)  {
-            const url = `${API_URL}/ressource`
+    getResource: async function(id)  {
+            const url = `${API_URL}/resource`
 //            console.log(url)
 //            id="TnvkOePmvMo3cUDoJLalS"
-            console.log("getting ressource")
+            console.log("getting resource")
             console.log(id)
             try{ 
             const response = await axios.get(url,
-                {params: {id : id} },
+                {params: {identifier : id} },
                 {}
                 )
                 //.then((response) => {

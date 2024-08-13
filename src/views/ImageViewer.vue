@@ -34,15 +34,15 @@ export default {
     this.initViewer();
   },
   methods: {
-    getRessource: async function(id)  {
-            const url = `${API_URL}/ressource`
+    getResource: async function(id)  {
+            const url = `${API_URL}/resource`
 //            console.log(url)
 //            id="TnvkOePmvMo3cUDoJLalS"
             console.log("getting ressource")
             console.log(id)
             try{ 
             const response = await axios.get(url,
-                {params: {id : id} },
+                {params: {identifier : id} },
                 {}
                 )
                 //.then((response) => {
@@ -59,7 +59,7 @@ export default {
       console.log("ID")
       console.log(imageViewerStore.id)
       console.log("getting images")
-      const d= await this.getRessource(imageViewerStore.id)
+      const d= await this.getResource(imageViewerStore.id)
       console.log("init Viewer here");
 ///      console.log(d)
   //    console.log(d.images)

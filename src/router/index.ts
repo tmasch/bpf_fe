@@ -18,9 +18,9 @@ const router = createRouter({
       component: () => import('../views/AboutView.vue')
     },
     {
-      path: '/newRessource',
-      name: 'newRessource',
-      component: () => import('../views/NewRessource.vue')
+      path: '/newResource',
+      name: 'newResource',
+      component: () => import('../views/NewResource.vue')
     },
     { 
       path: '/imageViewer',
@@ -28,9 +28,9 @@ const router = createRouter({
       component: () => import('../views/ImageViewer.vue')  
     },
     { 
-      path: '/ressources',
-      name: 'ressources',
-      component: () => import('../views/Ressources.vue')  
+      path: '/resources',
+      name: 'resources',
+      component: () => import('../views/Resources.vue')  
     },
     {
       path: '/Radiobutton - Experiment',

@@ -376,8 +376,8 @@
     </button>
 
 
-    <button @click="$event => createNewRessource(metadata)">
-        Create new ressource
+    <button @click="$event => createNewResource(metadata)">
+        Create new resource
     </button>
 
     <button @click="$event => saveConnectedRecords(metadata)">
@@ -450,8 +450,8 @@ export default {
                     console.log(this.metadata.repository[0])
                 })            
         },
-        createNewRessource(metadata) {
-            const url = `${API_URL}/createNewRessource`
+        createNewResource(metadata) {
+            const url = `${API_URL}/createNewResource`
             console.log(url)
             console.log(metadata)
             console.log(this.metadata)

@@ -3,8 +3,8 @@
         <h1>List of Resources</h1>
     </div>
     <!--
-    <button @click="$event => getRessources()">
-       Get ressources
+    <button @click="$event => getResources()">
+       Get resources
     </button>
 -->
     <table class="table">
@@ -52,11 +52,11 @@ export default {
             items: ''
         };
     }, mounted() {
-        this.getRessources()
+        this.getResources()
     },
     methods: {
-        getRessources() {
-            const url = `${API_URL}/allRessources`
+        getResources() {
+            const url = `${API_URL}/allResources`
             console.log(url)
             return axios.get(url,
                 {
@@ -65,13 +65,13 @@ export default {
                     this.items = response.data || ''
                 })
         },
-        getRessource: async function (id) {
-            const url = `${API_URL}/ressource`
-            console.log("getting ressource")
+        getResource: async function (id) {
+            const url = `${API_URL}/resource`
+            console.log("getting resource")
             console.log(id)
             try {
                 const response = await axios.get(url,
-                    { params: { id: id } },
+                    { params: { identifier: id } },
                     {}
                 )
                 return (response.data)
@@ -105,7 +105,7 @@ export default {
         },
         async createImageRecord(id) {
             console.log(id)
-            const d = await this.getRessource(id)
+            const d = await this.getResource(id)
             console.log(d)
             var x_abs = d.images[0].frames[0].x_abs
             var y_abs = d.images[0].frames[0].y_abs
@@ -116,7 +116,7 @@ export default {
             console.log("saving image")
             console.log(id)
             //var coords.id = id
-            // params: { id: id, page : "0", x_abs: x_abs, y_abs: y_abs, w_abs: w_abs, h_abs: h_abs }
+            // params: { identifier: id, page : "0", x_abs: x_abs, y_abs: y_abs, w_abs: w_abs, h_abs: h_abs }
                         try {
                 const response = await axios.post(url,
                 { id: id, index : 0, x_abs: x_abs, y_abs: y_abs, w_abs: w_abs, h_abs: h_abs }
