@@ -4,6 +4,7 @@
       <td>{{id}}</td>
  <!--     <td>{{ d.bibliograpic_information[0].title }}</td>=-->
     </tr>
+  <pre>{{ d }}</pre>
 </template>
 
 <script lang="ts">
@@ -33,7 +34,7 @@ export default {
     this.initDetails();
   },
   methods: {
-        async initDetails() {
+    async initDetails() {
       console.log("ID")
       console.log(imageViewerStore.id)
       const d= await this.getResource(imageViewerStore.id)
