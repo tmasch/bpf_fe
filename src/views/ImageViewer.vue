@@ -66,7 +66,7 @@ export default {
       var source = []
       var overlays = []
 //      for (let image in d.images){
-      d.metadata.images.forEach(function (image){
+      d.metadataI.images.forEach(function (image){
 //        console.log("images")
  //       console.log(image.baseurl)
         const url=image.baseurl+"/full/full/0/default.jpg"

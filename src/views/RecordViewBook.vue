@@ -177,7 +177,7 @@ export default {
     showOrgRecord(single_org){
       console.log("single_org: ")
       console.log(single_org)
-      personViewerStore.id_old = personViewerStore.id
+      perxsonViewerStore.id_old = personViewerStore.id
       personViewerStore.id = single_org
       console.log("ID in Book vue: ")
       console.log(personViewerStore.id)
