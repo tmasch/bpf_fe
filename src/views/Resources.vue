@@ -10,16 +10,16 @@
     <table class="table">
         <tbody>
             <tr v-for="(item, index) in items" :key="index">
-                <td :key="indexColumn">{{ item.type }}</td>
-                <td :key="indexColumn">{{ item.preview }}</td>
-                <td :key="indexColumn">{{ item.id }}</td>
+                <td>{{ item.type }}</td>
+                <td>{{ item.preview }}<br>{{ item.name_preferred }}<br>{{  item.title }}</td>
+                <td :key="indexColumn">{{ item._id }}</td>
                 <td>
                     <button @click="redirectToViewer(item.id)">View</button>
-                    <button @click="redirectToDetails(item.id)">Details</button>
-                    <button @click="redirectToImageTest(item.id)">Get Images</button>
-                    <button @click="createImageRecord(item.id)">Create image record</button>
-                    <button @click="redirectToRecordViewBook(item.id)" v-if="item.type == 'Book'">Book</button>
-                    <button @click="redirectToRecordViewManuscript(item.id)"
+                    <button @click="redirectToDetails(item._id)">Details</button>
+                    <button @click="redirectToImageTest(item._id)">Get Images</button>
+                    <button @click="createImageRecord(item._id)">Create image record</button>
+                    <button @click="redirectToRecordViewBook(item._id)" v-if="item.type == 'Book'">Book</button>
+                    <button @click="redirectToRecordViewManuscript(item._id)"
                         v-if="item.type == 'Manuscript'">Manuscript</button>
                 </td>
             </tr>
