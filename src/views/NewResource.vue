@@ -178,15 +178,15 @@
         </tr>
         <tr>
             <td style="vertical-align:top">Repository:</td>
-            <td style="vertical-align:top">{{ metadata.repository[0].name }}</td>
+            <td style="vertical-align:top">{{ metadata.repository.entity_and_connections.organisation.name }}</td>
             <td> 
                 <table>
-                <tr> <td v-if="metadata.repository[0].internal_id"> {{repository[0]["internal_id_preview"]}} </td></tr>
-                <tr v-if="!metadata.repository[0].internal_id" v-for="(candidate_repository, number) in metadata.repository[0].potential_candidates" :key="number">
-                <td> <input type="radio" v-bind:id="candidate_repository.preview" v-bind:value= "number" v-model="metadata.repository[0].chosen_candidate">
+                <tr> <td v-if="metadata.repository.internal_id"> {{repository["internal_id_preview"]}} </td></tr>
+                <tr v-if="!metadata.repository.internal_id" v-for="(candidate_repository, number) in metadata.repository.potential_candidates" :key="number">
+                <td> <input type="radio" v-bind:id="candidate_repository.preview" v-bind:value= "number" v-model="metadata.repository.chosen_candidate">
                 <label for="candidate_repository">{{ candidate_repository.preview }} <span style="color:red"> {{ candidate_repository.internal_id_org_type1_comment }}</span></label>
                 </td></tr>
-                <tr v-if="!metadata.repository[0].internal_id"> 
+                <tr v-if="!metadata.repository.internal_id"> 
                     <td>
                         or enter other GND number: <input v-model="new_authority_id_rep" /> 
                         <div v-if="additional_repository_authority"> 
