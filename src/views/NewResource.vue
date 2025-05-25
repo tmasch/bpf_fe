@@ -178,7 +178,7 @@
         </tr>
         <tr>
             <td style="vertical-align:top">Repository:</td>
-            <td style="vertical-align:top">{{ metadata.repository.entity_and_connections.organisation.name }}</td>
+            <td style="vertical-align:top">{{ metadata.repository.entity_and_connections.entity.name }}</td>
             <td> 
                 <table>
                 <tr> <td v-if="metadata.repository.internal_id"> {{repository["internal_id_preview"]}} </td></tr>
